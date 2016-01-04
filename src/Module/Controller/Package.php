@@ -2,7 +2,7 @@
 /**
  * Verone CRM | http://www.veronecrm.com
  *
- * @copyright  Copyright (C) 2015 Adam Banaszkiewicz
+ * @copyright  Copyright (C) 2015 - 2016 Adam Banaszkiewicz
  * @license    GNU General Public License version 3; see license.txt
  */
 
@@ -60,10 +60,13 @@ class Package extends BaseController
         }
         catch(Exception $e)
         {
+            $this->log(sprintf($this->t('packageModuleInstallationLogError'), $installator->getManifest()->get('name'), $e->getMessage()), 2, 'Package');
             $this->flash('danger', $e->getMessage());
             $this->flash('installator.logs', $installator->getLogs());
             return $this->redirect('Package', 'Package', 'install');
         }
+
+        $this->log(sprintf($this->t('packageModuleInstallationLogSuccess'), $installator->getManifest()->get('name')), 2, 'Package');
 
         $this->flash('installator.logs', $installator->getLogs());
         $this->flash('success', $this->t('packageModuleInstalledSuccesfully'));
@@ -99,11 +102,13 @@ class Package extends BaseController
         }
         catch(Exception $e)
         {
+            $this->log(sprintf($this->t('packageModuleUnnstallationLogError'), $uninstallator->getManifest()->get('name'), $e->getMessage()), 2, 'Package');
             $this->flash('danger', $e->getMessage());
             $this->flash('uninstallator.logs', $uninstallator->getLogs());
             return $this->redirect('Package', 'Package', 'index');
         }
 
+        $this->log(sprintf($this->t('packageModuleUnnstallationLogSuccess'), $uninstallator->getManifest()->get('name')), 2, 'Package');
         $this->flash('uninstallator.logs', $uninstallator->getLogs());
         $this->flash('success', $this->t('packageModuleUninstalledSuccesfully'));
         return $this->redirect('Package', 'Package', 'index');
